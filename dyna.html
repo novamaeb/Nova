@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    
+    
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="shortcut icon" href="#">
+
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
+
+ 
+    <title>Document</title>
+</head>
+
+<style>
+    body {
+      background-image: url('https://static.vecteezy.com/system/resources/previews/000/549/810/original/vector-abstract-technology-background-technology-digital-world-of-business-information-futuristic-blue-virtual-graphic-interface.jpg');
+      background-repeat: no-repeat;
+      background-attachment: fixed;
+      background-size: 100% 100%;
+    }
+    </style>
+
+<body>
+
+    <div style="margin-top: 100px" class="container">
+
+           
+    <div style="margin-top: 100px" class="container">
+         
+        <form id="myForm" class="ui form">
+
+            <div class="field">
+                
+                <label style="font-size: larger; font-family: Georgia;">Enter ID Number:</label>  
+                <input type="text" id="uid" name="uid" maxlength="10" style="background-color:#cedee9;">
+            </div>
+
+            <button class="btn waves-effect waves-light" type="submit" id="submit_btn" name="action" style="background-color: darkcyan;">Submit
+                <i class="material-icons right">send</i>
+              </button>
+                    
+        
+        </form>
+        <ul class="collection" style="font-family: sans-serif; font-size: larger;">
+            <li class="collection-item avatar" style="background-color: #cedee9;">    
+                <img src="https://as2.ftcdn.net/v2/jpg/01/06/92/47/1000_F_106924759_7qPPu6bZNN2O4al1ExdEWBdHUcpKMwuJ.jpg" alt="" class="circle">
+                <span id="data_image"> </span>
+                <p id="data_title">Name:</p>
+                <p id="data_age">Age:</p></p>
+                <p id="data_contact_number">Contact Number:</p>
+                <p id="data_email">Email:</p>
+
+                
+                </body>
+            </p></li>
+        </ul>
+
+    </div>
+    
+
+    <script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
+    
+    <script>
+        $(document).ready(function(){
+
+                            $("#submit_btn").click(function(event) {
+                                    event.preventDefault(); // prevent form from submitting normally
+                                
+                                    // serialize form data
+                                    var formData =  $("#myForm").serializeArray();
+                        
+                                    console.log("Payload :" + JSON.stringify(formData));
+
+                                    // send AJAX request
+                                    $.ajax({
+                                        url: "http://172.17.100.12:8081/caballes/cgi-bin/dyna.o",
+                                        type: "POST",
+                                        data: JSON.stringify(formData),
+                                        contentType: 'application/json',    
+                                        dataType: 'json',                                 
+                                        success: function(response) {
+                                        // handle success response                                              
+                                                if (response.status === "success") {
+                                                    console.log(response.data)
+
+                                                    for (let i = 0; i < response.data.length; i++) {
+                                                        $("#data_title").html(response.data[i].name);
+                                                        $("#data_age").html(response.data[i].age);
+                                                        $("#data_contact_number").html(response.data[i].Contact_Number);
+                                                        $("#data_email").html(response.data[i].Email);
+                                                        $("#data_image").html('<img src="images/' + response.data[i].id + '.png" alt="" class="circle">')
+                                            
+                                                    }
+                                                }                                        
+                                        },
+                                        error: function(xhr, status, error) {
+                                        // handle error response
+                                        console.log( JSON.stringify(formData));
+                                        console.log(xhr.responseText);
+                                        }
+                                    });
+
+                                    
+                            });
+
+                });
+            
+    </script>
+
+    
+
+
+</body>
+</html>
+
